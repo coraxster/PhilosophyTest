@@ -1,9 +1,9 @@
-##TripSorterExample
+## TripSorterExample
 
-####Task
+#### Task
 in task.pdf
 
-####Install
+#### Install
 ```
 git clone https://github.com/coraxster/TripSorter.git
 cd TripSorter
@@ -16,14 +16,14 @@ docker run --rm -it -v "$PWD":/app composer install --ignore-platform-reqs
 
 
 
-####Test
+#### Test
 ```
 #local run
 phpunit
 #or using docker
 docker run -v "$PWD":/app --rm -it phpunit/phpunit -c phpunit.xml
 ```
-####Run example
+#### Run example
 ```
 #local run
 php -S localhost:8000 -t example
