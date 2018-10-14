@@ -19,7 +19,7 @@ class TicketCollection implements TicketCollectionInterface
     /**
      * TicketCollection constructor.
      *
-     * todo: maybe we need validation mechanism here... as example in case we get 2 separate stacks in array
+     * todo: maybe we need validation mechanism here... as example in case we get 2 separate stacks in array or loops
      *
      * @param array $tickets
      */
