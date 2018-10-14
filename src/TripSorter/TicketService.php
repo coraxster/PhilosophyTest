@@ -47,6 +47,41 @@ class TicketService
         return new TicketCollection($tickets);
     }
 
+    public function orderByPath(TicketCollectionInterface $tickets): TicketCollection
+    {
+        $this->validateTrip($tickets);
+        $ticket = $tickets->findStartTickets()->first();
+        $newTickets = [$ticket];
+        while($ticket = $tickets->withDeparture( $ticket->getDestinationPoint() )->first()){
+            $newTickets[] = $ticket;
+            $tickets = $tickets->without($ticket);
+        }
+        return new TicketCollection($newTickets);
+    }
 
+    public function validateTrip(TicketCollectionInterface $tickets)
+    {
+        $starts = $tickets->findStartTickets();
+        if ($starts->count() === 0 ) {
+            throw new \Exception('There is no start point in tickets set.');
+        }
+
+        if ($starts->count() > 1 ) {
+            throw new \Exception('There are few start points in tickets set.');
+        }
+
+        $deps = $dests = [];
+        foreach ($tickets as $ticket) {
+            $deps[] = $ticket->getDeparturePoint();
+            $dests[] = $ticket->getDestinationPoint();
+        }
+
+        if (count(array_unique($deps)) !== count($deps)) {
+            throw new \Exception('There are few tickets with the same departure point.');
+        }
+        if (count(array_unique($dests)) !== count($dests)) {
+            throw new \Exception('There are few tickets with the same destination point.');
+        }
+    }
 
 }

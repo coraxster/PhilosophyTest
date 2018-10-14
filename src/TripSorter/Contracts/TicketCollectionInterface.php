@@ -8,9 +8,7 @@ interface TicketCollectionInterface extends \IteratorAggregate
 
     public function toArray(): array;
 
-    public function orderedByPath(): TicketCollectionInterface;
-
-    public function findStartTicket(): TicketInterface;
+    public function findStartTickets(): TicketCollectionInterface;
 
     public function withDestination(string $destinationPoint) : TicketCollectionInterface;
 

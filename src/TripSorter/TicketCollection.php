@@ -19,8 +19,6 @@ class TicketCollection implements TicketCollectionInterface
     /**
      * TicketCollection constructor.
      *
-     * todo: maybe we need validation mechanism here... as example in case we get 2 separate stacks in array or loops
-     *
      * @param array $tickets
      */
     public function __construct(array $tickets)
@@ -48,34 +46,18 @@ class TicketCollection implements TicketCollectionInterface
     }
 
     /**
-     * @return TicketCollectionInterface
-     * @throws \Exception
+     * @return TicketCollection
      */
-    public function orderedByPath(): TicketCollectionInterface
+    public function findStartTickets() : TicketCollectionInterface
     {
-        $ticket = $this->findStartTicket();
-        $tickets = [$ticket];
-        $ticketsCol = $this;
-        while($ticket = $ticketsCol->withDeparture( $ticket->getDestinationPoint() )->first()){
-            $tickets[] = $ticket;
-            $ticketsCol = $ticketsCol->without($ticket);
-        }
-        return new self($tickets);
-    }
-
-    /**
-     * @return TicketInterface
-     * @throws \Exception
-     */
-    public function findStartTicket() : TicketInterface
-    {
+        $startTickets = [];
         foreach ($this->tickets as $ticket){
             $departurePoint = $ticket->getDeparturePoint();
             if ($this->withDestination($departurePoint)->count() === 0){
-                return $ticket;
+                $startTickets[] = $ticket;
             }
         }
-        throw new \Exception('There is no start point in tickets set.');
+        return new TicketCollection($startTickets);
     }
 
     /**

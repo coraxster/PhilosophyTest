@@ -61,39 +61,9 @@ class TicketCollectionTest extends \PHPUnit\Framework\TestCase
         $ticket1 = new \TripSorter\Tickets\AirportBusTicket($ticker1Data);
         $ticket2 = new \TripSorter\Tickets\AirportBusTicket($ticker2Data);
         $ticketCollection = new \TripSorter\TicketCollection([$ticket2, $ticket1]);
-        $found = $ticketCollection->findStartTicket();
-        $this->assertEquals($found, $ticket1);
-    }
-
-    public function testFindStartTicketInEmptyCollection()
-    {
-        $ticketCollection = new \TripSorter\TicketCollection([]);
-        $this->expectException(\Exception::class);
-        $ticketCollection->findStartTicket();
-    }
-
-    public function testOrdering()
-    {
-        $depPoint1 = 'MOSCOW';
-        $destPoint1 = 'SPB';
-        $depPoint2 = $destPoint1;
-        $destPoint2 = 'KAZAN';
-
-        $ticker1Data = [
-            'DEPARTURE_POINT' => $depPoint1,
-            'DESTINATION_POINT' => $destPoint1,
-        ];
-        $ticker2Data = [
-            'DEPARTURE_POINT' => $depPoint2,
-            'DESTINATION_POINT' => $destPoint2,
-        ];
-        $ticket1 = new \TripSorter\Tickets\AirportBusTicket($ticker1Data);
-        $ticket2 = new \TripSorter\Tickets\AirportBusTicket($ticker2Data);
-        $expectingOrdered = [$ticket1, $ticket2];
-
-        $ticketCollection = new \TripSorter\TicketCollection([$ticket2, $ticket1]);
-        $orderedArray = $ticketCollection->orderedByPath()->toArray();
-        $this->assertEquals($orderedArray, $expectingOrdered);
+        $found = $ticketCollection->findStartTickets();
+        $this->assertEquals($found->first(), $ticket1);
+        $this->assertEquals($found->count(), 1);
     }
 
 }
